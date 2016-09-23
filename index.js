@@ -18,7 +18,7 @@ const FB = require('./facebook.js');
 const wit = bot.getWit();
 
 // Webserver parameter
-const PORT = process.env.PORT || 8445;
+//const PORT = process.env.PORT || 8445;
 
 // Wit.ai bot specific code
 
