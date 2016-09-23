@@ -1,10 +1,19 @@
 'use strict';
 
-// Weather Example
-// See https://wit.ai/sungkim/weather/stories and https://wit.ai/docs/quickstart
-const Wit = require('node-wit').Wit;
-const FB = require('./facebook.js');
+let Wit = null;
+let interactive = null;
+try {
+  // if running from repo
+  Wit = require('../').Wit;
+  interactive = require('../').interactive;
+} catch (e) {
+  Wit = require('node-wit').Wit;
+  interactive = require('node-wit').interactive;
+}
+
 const Config = require('./const.js');
+const FB = require('./facebook.js');
+
 
 const firstEntityValue = (entities, entity) => {
   const val = entities && entities[entity] &&
@@ -19,110 +28,47 @@ const firstEntityValue = (entities, entity) => {
 
 // Bot actions
 const actions = {
-  say(sessionId, context, message, cb) {
-    console.log(message);
-
-    // Bot testing mode, run cb() and return
-    if (require.main === module) {
-      cb();
-      return;
-    }
-
-    // Our bot has something to say!
-    // Let's retrieve the Facebook user whose session belongs to from context
-    // TODO: need to get Facebook user name
-    const recipientId = context._fbid_;
-    if (recipientId) {
-      // Yay, we found our recipient!
-      // Let's forward our bot response to her.
-      FB.fbMessage(recipientId, message, (err, data) => {
-        if (err) {
-          console.log(
-            'Oops! An error occurred while forwarding the response to',
-            recipientId,
-            ':',
-            err
-          );
-        }
-        // Let's give the wheel back to our bot
-        cb();
-      });
-    } else {
-      console.log('Oops! Couldn\'t find user in context:', context);
-      // Giving the wheel back to our bot
-      cb();
-    }
+  send(request, response) {
+    const {sessionId, context, entities} = request;
+    const {text, quickreplies} = response;
+    return new Promise(function(resolve, reject) {
+      console.log('sending...', JSON.stringify(response));
+      return resolve();
+    });
   },
-  merge(sessionId, context, entities, message, cb) {
-    // Retrieve the location entity and store it into a context field
-    const intent = firstEntityValue(entities, 'intent');
-    if (intent) {
-      context.intent = intent; // store it in context
-    }
+  spiderFact({context, entities}) {
+    return new Promise(function(resolve, reject) {
+      console.log(JSON.stringify(context));
+      console.log(JSON.stringify(entities));
+      console.log(firstEntityValue(entities, 'intent'));
 
-    cb(context);
+      var intent = firstEntityValue(entities, 'intent')
+      if (intent === 'spider fact') {
+        console.log('grabbing a spider fact');
+        var wantedFact = spiderFact['facts'];
+        context.fact = wantedFact[Math.floor(Math.random() * wantedFact.length)]
+      } else if (intent === 'spider picture') {
+        console.log('grabbing a spider picture');
+        var wantedFact = spiderFact['pics'];
+        context.fact = wantedFact[Math.floor(Math.random() * wantedFact.length)]
+      } else {
+        var wantedFact = spiderFact['default'];
+        context.fact = wantedFact[Math.floor(Math.random() * wantedFact.length)]
+        console.log('other');
+      };
+      return resolve(context);
+    });
   },
-
-  error(sessionId, context, error) {
-    console.log(error.message);
-  },
-
-  // fetch-weather bot executes
-  ['spider-fact'](sessionId, context, cb) {
-    if (context.intent === 'spider fact') {
-      console.log('grabbing a spider fact');
-      var wantedFact = spiderFact['facts'];
-      context.fact = wantedFact[Math.floor(Math.random() * wantedFact.length)]
-    } else if (context.intent === 'spider picture') {
-      console.log('grabbing a spider picture');
-      var wantedFact = spiderFact['pics'];
-      context.fact = wantedFact[Math.floor(Math.random() * wantedFact.length)]
-    } else {
-      var wantedFact = spiderFact['defulat'];
-      context.fact = wantedFact[Math.floor(Math.random() * wantedFact.length)]
-      console.log('other');
-    };
-    // Here should go the api call, e.g.:
-    // context.forecast = apiCall(context.loc)
-    //var wantedPics = allPics['spiders'];
-    console.log(JSON.stringify(context));
-
-    //context.pics = wantedPics[Math.floor(Math.random() * wantedPics.length)]
-    cb(context);
-  },
-
-    // fetch-weather bot executes
-/*  ['spider-facts'](sessionId, context, cb) {
-    // Here should go the api call, e.g.:
-    // context.forecast = apiCall(context.loc)
-    context.fact = 'spiders are awesome';
-    cb(context);
-  },
-
-  ['fetch-pics'](sessionId, context, cb) {
-    //var wantedPics = allPics[context.cat || 'default']
-    //console.log('watchedpics');
-    context.pics = wantedPics[Math.floor(Math.random() * wantedPics.length)]
-
-    cb(context)
-  },*/
 
 };
 
 
-const getWit = () => {
-  return new Wit(Config.WIT_TOKEN, actions);
-};
 
-exports.getWit = getWit;
+var accessToken = Config.WIT_TOKEN;
 
-// bot testing mode
-// http://stackoverflow.com/questions/6398196
-if (require.main === module) {
-  console.log("Bot testing mode.");
-  const client = getWit();
-  client.interactive();
-}
+const client = new Wit({accessToken, actions});
+interactive(client);
+
 
 // LIST OF ALL PICS
 var spiderFact = {
