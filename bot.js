@@ -44,7 +44,6 @@ const actions = {
             err
           );
         }
-
         // Let's give the wheel back to our bot
         cb();
       });
@@ -56,9 +55,9 @@ const actions = {
   },
   merge(sessionId, context, entities, message, cb) {
     // Retrieve the location entity and store it into a context field
-    const loc = firstEntityValue(entities, 'location');
-    if (loc) {
-      context.loc = loc; // store it in context
+    const intent = firstEntityValue(entities, 'intent');
+    if (intent) {
+      context.intent = intent; // store it in context
     }
 
     cb(context);
@@ -69,12 +68,45 @@ const actions = {
   },
 
   // fetch-weather bot executes
-  ['fetch-weather'](sessionId, context, cb) {
+  ['spider-fact'](sessionId, context, cb) {
+    if (context.intent === 'spider fact') {
+      console.log('grabbing a spider fact');
+      var wantedFact = spiderFact['facts'];
+      context.fact = wantedFact[Math.floor(Math.random() * wantedFact.length)]
+    } else if (context.intent === 'spider picture') {
+      console.log('grabbing a spider picture');
+      var wantedFact = spiderFact['pics'];
+      context.fact = wantedFact[Math.floor(Math.random() * wantedFact.length)]
+    } else {
+      var wantedFact = spiderFact['defulat'];
+      context.fact = wantedFact[Math.floor(Math.random() * wantedFact.length)]
+      console.log('other');
+    };
     // Here should go the api call, e.g.:
     // context.forecast = apiCall(context.loc)
-    context.forecast = 'sunny';
+    //var wantedPics = allPics['spiders'];
+    console.log(JSON.stringify(context));
+
+    //context.pics = wantedPics[Math.floor(Math.random() * wantedPics.length)]
     cb(context);
   },
+
+    // fetch-weather bot executes
+/*  ['spider-facts'](sessionId, context, cb) {
+    // Here should go the api call, e.g.:
+    // context.forecast = apiCall(context.loc)
+    context.fact = 'spiders are awesome';
+    cb(context);
+  },
+
+  ['fetch-pics'](sessionId, context, cb) {
+    //var wantedPics = allPics[context.cat || 'default']
+    //console.log('watchedpics');
+    context.pics = wantedPics[Math.floor(Math.random() * wantedPics.length)]
+
+    cb(context)
+  },*/
+
 };
 
 
@@ -91,3 +123,19 @@ if (require.main === module) {
   const client = getWit();
   client.interactive();
 }
+
+// LIST OF ALL PICS
+var spiderFact = {
+  facts: [
+    'spiders are so cool',
+    'spiders forever',
+    'NEVER kill a spider or the ghost will haunt you forever',
+  ],
+  pics: [
+    'https://i.redditmedia.com/-Zf62lfqQ9PqoF2yiiY2XWcHD3-CJR0-o2BhINUIMEY.jpg?w=768&s=a49978d533c4015bc787fdb0b77686f5',
+    'http://i.imgur.com/ZwRf93U.jpg',
+  ],
+  default: [
+     'Sorry I do not understand that yet'
+  ],
+};
