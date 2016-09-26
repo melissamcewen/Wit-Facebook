@@ -14,13 +14,6 @@ const bot = require('./bot.js');
 const Config = require('./const.js');
 const FB = require('./facebook.js');
 
-// Setting up our bot
-const wit = bot.getWit(); 
-
-
-// Webserver parameter
-const PORT = process.env.PORT || 8445;
-
 // Wit.ai bot specific code
 // This will contain all user sessions.
 // Each session has an entry:
@@ -48,6 +41,15 @@ const findOrCreateSession = (fbid) => {
   }
   return sessionId;
 };
+
+// Setting up our bot
+const wit = bot.getWit(); 
+
+
+// Webserver parameter
+const PORT = process.env.PORT || 8445;
+
+
 
 // Starting our webserver and putting it all together
 const app = express();
