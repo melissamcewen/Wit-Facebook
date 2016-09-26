@@ -10,25 +10,17 @@ const bodyParser = require('body-parser');
 const express = require('express');
 
 // get Bot, const, and Facebook API
-const bot = require('./bot.js');
+const bot = require('./bot.js').Wit;
 const Config = require('./const.js');
 const FB = require('./facebook.js');
 
 // Setting up our bot
-/*const wit = bot.getWit(); */
-let Wit = null;
-let log = null;
-try {
-  // if running from repo
-  Wit = require('../').Wit;
-  log = require('../').log;
-} catch (e) {
-  Wit = require('node-wit').Wit;
-  log = require('node-wit').log;
-}
+
+//const wit = bot.Wit(); 
+
 
 // Webserver parameter
-//const PORT = process.env.PORT || 8445;
+const PORT = process.env.PORT || 8445;
 
 // Wit.ai bot specific code
 
