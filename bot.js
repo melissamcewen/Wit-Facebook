@@ -5,10 +5,10 @@ let interactive = null;
 try {
   // if running from repo
   Wit = require('../').Wit;
-  interactive = require('../').interactive;
+  //interactive = require('../').interactive;
 } catch (e) {
   Wit = require('node-wit').Wit;
-  interactive = require('node-wit').interactive;
+ // interactive = require('node-wit').interactive;
 }
 
 const Config = require('./const.js');
@@ -67,7 +67,7 @@ const actions = {
 var accessToken = Config.WIT_TOKEN;
 
 const client = new Wit({accessToken, actions});
-interactive(client);
+//interactive(client);
 
 const getWit = () => {
   return new Wit({accessToken, actions});
