@@ -38,6 +38,7 @@ const fbReq = request.defaults({
 };*/
 
 
+
 // See the Webhook reference
 // https://developers.facebook.com/docs/messenger-platform/webhook-reference
 const getFirstMessagingEntry = (body) => {
@@ -57,6 +58,6 @@ const getFirstMessagingEntry = (body) => {
 
 module.exports = {
   getFirstMessagingEntry: getFirstMessagingEntry,
-  fbMessage: fbMessage,
+  //fbMessage: fbMessage,
   fbReq: fbReq
 };
