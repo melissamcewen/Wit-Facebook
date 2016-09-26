@@ -93,7 +93,7 @@ const actions = {
 var accessToken = Config.WIT_TOKEN;
 
 //const client = new Wit({accessToken, actions});
-interactive(client);
+//interactive(client);
 
 const getWit = () => {
   return new Wit({accessToken, actions});
