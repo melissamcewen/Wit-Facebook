@@ -69,6 +69,11 @@ var accessToken = Config.WIT_TOKEN;
 const client = new Wit({accessToken, actions});
 interactive(client);
 
+const getWit = () => {
+  return new Wit({accessToken, actions});
+};
+
+exports.getWit = getWit;
 
 // LIST OF ALL PICS
 var spiderFact = {

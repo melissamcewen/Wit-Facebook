@@ -10,13 +10,12 @@ const bodyParser = require('body-parser');
 const express = require('express');
 
 // get Bot, const, and Facebook API
-const bot = require('./bot.js').Wit;
+const bot = require('./bot.js');
 const Config = require('./const.js');
 const FB = require('./facebook.js');
 
 // Setting up our bot
-
-//const wit = bot.Wit(); 
+const wit = bot.getWit(); 
 
 
 // Webserver parameter
