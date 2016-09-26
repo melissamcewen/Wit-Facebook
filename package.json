@@ -27,7 +27,8 @@
     "jest-cli": "^0.7.1"
   },
   "engines": {
-    "node": "6.4.0"
+    "node": "6.4.0",
+    "npm": "3.10.3"
   },
   "repository": {
     "type": "git",
