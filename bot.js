@@ -44,7 +44,7 @@ const actions = {
     // Let's retrieve the Facebook user whose session belongs to
     //const recipientId = context._fbid_;
       console.log('Let us retrieve the Facebook user whose session belongs to');
-
+      console.log('sessions is' + sessions);
     const recipientId = sessions[sessionId].fbid;
     console.log('recipientId is: ' + recipientId);
     if (recipientId) {
