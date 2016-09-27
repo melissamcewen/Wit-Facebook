@@ -43,9 +43,11 @@ const actions = {
     // Our bot has something to say!
     // Let's retrieve the Facebook user whose session belongs to
     //const recipientId = context._fbid_;
+      console.log('Let us retrieve the Facebook user whose session belongs to');
 
     const recipientId = sessions[sessionId].fbid;
     if (recipientId) {
+      console.log('sending a message');
       // Yay, we found our recipient!
       // Let's forward our bot response to her.
       // We return a promise to let our bot know when we're done sending
