@@ -33,6 +33,7 @@ const findOrCreateSession = (fbid) => {
   Object.keys(sessions).forEach(k => {
     if (sessions[k].fbid === fbid) {
       // Yep, got it!
+      console.log('I got a session ID');
       sessionId = k;
     }
   });
@@ -46,6 +47,8 @@ const findOrCreateSession = (fbid) => {
       }
     }; // set context, _fid_
   }
+  console.log('sessionId is set');
+
   return sessionId;
 };
 

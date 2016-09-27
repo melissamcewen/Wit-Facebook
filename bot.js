@@ -46,6 +46,7 @@ const actions = {
       console.log('Let us retrieve the Facebook user whose session belongs to');
 
     const recipientId = sessions[sessionId].fbid;
+    console.log('recipientId is: ' + recipientId);
     if (recipientId) {
       console.log('sending a message');
       // Yay, we found our recipient!
